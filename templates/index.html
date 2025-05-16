@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Nova Chat Web </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        // Tailwind dark mode configuration
+        tailwind.config = {
+            darkMode: 'class', // or 'media'
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Dark theme colors (can be customized further)
+                        dark: {
+                            bg_main: '#1e1e2e',
+                            bg_sidebar: '#181825',
+                            bg_input: '#313244',
+                            bg_chat_history: '#242438',
+                            text_light: '#cdd6f4',
+                            text_dark: '#11111b',
+                            accent: '#94e2d5',
+                            secondary_accent: '#f5c2e7',
+                            user_msg_fg: '#89b4fa',
+                            bot_msg_fg: '#a6e3a1',
+                            error: '#f38ba8',
+                            button: '#cba6f7',
+                            button_hover: '#b4befe',
+                            button_text: '#11111b',
+                            timestamp: '#888899',
+                            code_bg: '#282a36',
+                            code_fg: '#f8f8f2',
+                        },
+                        // Light theme colors
+                        light: {
+                            bg_main: '#f0f0f0',
+                            bg_sidebar: '#e0e0e0',
+                            bg_input: '#ffffff',
+                            bg_chat_history: '#fafafa',
+                            text_light: '#2c3e50',
+                            text_dark: '#ffffff',
+                            accent: '#3498db',
+                            secondary_accent: '#9b59b6',
+                            user_msg_fg: '#2980b9',
+                            bot_msg_fg: '#27ae60',
+                            error: '#e74c3c',
+                            button: '#3498db',
+                            button_hover: '#2980b9',
+                            button_text: '#ffffff',
+                            timestamp: '#7f8c8d',
+                            code_bg: '#ecf0f1',
+                            code_fg: '#2c3e50',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans antialiased">
+    <div id="app-container" class="flex flex-col h-screen transition-colors duration-300">
+        <header id="app-header" class="bg-dark-bg_sidebar text-dark-text_light p-4 shadow-md flex justify-between items-center transition-colors duration-300">
+            <h1 class="text-2xl font-bold text-dark-accent">Welcome to Nova!</h1>
+            <div class="flex items-center space-x-2">
+                <div id="status-indicator" class="w-3 h-3 rounded-full bg-red-500" title="API Status"></div>
+                <span id="status-text" class="text-sm">Connecting...</span>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="app-sidebar" class="w-64 bg-dark-bg_sidebar text-dark-text_light p-5 space-y-4 shadow-lg transition-colors duration-300 overflow-y-auto">
+                <h2 class="text-lg font-semibold text-dark-text_light mb-3">Options</h2>
+                <button id="theme-toggle-btn" class="w-full text-left p-3 rounded-lg hover:bg-dark-button_hover bg-dark-button text-dark-button_text font-medium transition-colors duration-150">
+                    🎨 Toggle Theme
+                </button>
+                <button id="clear-chat-btn" class="w-full text-left p-3 rounded-lg hover:bg-dark-button_hover bg-dark-button text-dark-button_text font-medium transition-colors duration-150">
+                    🗑️ Clear Chat
+                </button>
+                <button id="save-chat-btn" class="w-full text-left p-3 rounded-lg hover:bg-dark-button_hover bg-dark-button text-dark-button_text font-medium transition-colors duration-150">
+                    💾 Save Chat
+                </button>
+                <button id="copy-last-btn" class="w-full text-left p-3 rounded-lg hover:bg-dark-button_hover bg-dark-button text-dark-button_text font-medium transition-colors duration-150">
+                    📋 Copy Last Bot Msg
+                </button>
+                 <div class="mt-auto pt-4 border-t border-gray-700" style="display:none">
+                    <label for="api-key-input" class="block text-sm font-medium text-dark-text_light mb-1">API Key (Optional)</label>
+                    <input type="password" id="api-key-input" placeholder="Enter API Key if needed"
+                           class="w-full p-2 rounded-md bg-dark-bg_input text-dark-text_light border border-gray-600 focus:ring-dark-accent focus:border-dark-accent">
+                    <p class="text-xs text-gray-400 mt-1">Key is used from server by default. This field is for overrides or if server key fails.</p>
+                </div>
+            </aside>
+
+            <main class="flex-1 flex flex-col bg-dark-bg_main p-6 transition-colors duration-300">
+                <div id="chat-history" class="flex-1 overflow-y-auto mb-4 p-4 bg-dark-bg_chat_history rounded-lg shadow space-y-4 scroll-smooth">
+                    <div class="text-center p-3">
+                        <p class="text-lg font-semibold text-dark-accent">Welcome to Nova Chatbot</p>
+                        <p class="text-sm text-dark-text_light mt-1">Your modern assistant. Ask anything!</p>
+                    </div>
+                </div>
+
+                <div id="input-area" class="bg-dark-bg_main p-1 rounded-lg shadow-md transition-colors duration-300">
+                    <div class="flex items-center bg-dark-bg_input rounded-lg p-1">
+                        <textarea id="user-input" rows="1"
+                               class="flex-1 p-3 bg-transparent text-dark-text_light placeholder-gray-500 focus:outline-none resize-none"
+                               placeholder="Type your message... (Shift+Enter for new line)"></textarea>
+                        <button id="send-btn"
+                                class="p-3 rounded-md bg-dark-button text-dark-button_text hover:bg-dark-button_hover font-semibold transition-colors duration-150 ml-2">
+                            Send ➤
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

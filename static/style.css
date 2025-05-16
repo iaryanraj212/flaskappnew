@@ -1,0 +1,171 @@
+/* static/style.css */
+body {
+    font-family: 'Inter', sans-serif;
+    overscroll-behavior: none; /* Prevents pull-to-refresh on mobile for a more app-like feel */
+}
+
+/* Custom scrollbar for chat history (WebKit browsers) */
+#chat-history::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-history::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+    background-color: #555; 
+    border-radius: 10px;
+    border: 2px solid transparent; 
+}
+
+#chat-history::-webkit-scrollbar-thumb:hover {
+    background-color: #777;
+}
+
+
+.dark #chat-history::-webkit-scrollbar-thumb {
+    background-color: var(--tw-prose-invert-hr, #4a5568);
+}
+.dark #chat-history::-webkit-scrollbar-thumb:hover {
+    background-color: var(--tw-prose-invert-hr, #6b7280);
+}
+
+
+/* Message bubble styling */
+.message-bubble {
+    max-width: 75%;
+    padding: 0.75rem 1rem; /* 12px 16px */
+    border-radius: 0.75rem; /* 12px */
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.user-message {
+    background-color: var(--user-msg-bg-color, #89b4fa); /* Default, will be overridden by JS */
+    color: var(--user-msg-text-color, #11111b);
+    margin-left: auto;
+    border-bottom-right-radius: 0.25rem; /* Slight variation for user */
+}
+
+.bot-message {
+    background-color: var(--bot-msg-bg-color, #a6e3a1); /* Default, will be overridden by JS */
+    color: var(--bot-msg-text-color, #11111b);
+    margin-right: auto;
+    border-bottom-left-radius: 0.25rem; /* Slight variation for bot */
+}
+
+.error-message {
+    background-color: var(--error-bg-color, #f38ba8); /* Default */
+    color: var(--error-text-color, #11111b);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.system-message {
+    text-align: center;
+    font-size: 0.875rem; /* 14px */
+    color: var(--system-text-color, #888899); /* Default */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.timestamp {
+    font-size: 0.75rem; /* 12px */
+    color: var(--timestamp-color, #888899); /* Default */
+    margin-top: 0.25rem;
+    display: block;
+}
+.user-message .timestamp { text-align: right; }
+.bot-message .timestamp { text-align: left; }
+
+
+/* Code block styling */
+.code-block {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    /* background-color is set inline by format_message_for_html or can be themed here */
+    /* color is set inline or themed */
+    border: 1px solid #444; /* Themed border for code block */
+    overflow-x: auto; /* Allow horizontal scrolling for long code lines */
+    white-space: pre-wrap; /* Wrap normally, but preserve spaces and line breaks */
+    word-break: break-all; /* Break long words if necessary to prevent overflow */
+}
+
+.dark .code-block {
+    background-color: #282a36 !important; /* From dark theme */
+    color: #f8f8f2 !important; /* From dark theme */
+    border-color: #3a3c4e;
+}
+
+.light .code-block {
+    background-color: #ecf0f1 !important; /* From light theme */
+    color: #2c3e50 !important; /* From light theme */
+    border-color: #bdc3c7;
+}
+
+
+/* Input textarea auto-resize */
+#user-input {
+    min-height: 44px; /* approx 1 row with padding */
+    max-height: 150px; /* approx 5-6 rows */
+    overflow-y: auto; /* Add scroll if content exceeds max-height */
+}
+
+/* Basic button styling for non-Tailwind buttons if any, or overrides */
+button {
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #app-sidebar {
+        width: 200px; /* Smaller sidebar on mobile */
+        padding: 0.75rem; /* 12px */
+    }
+    #app-sidebar h2 {
+        font-size: 1rem; /* 16px */
+    }
+    #app-sidebar button {
+        padding: 0.5rem; /* 8px */
+        font-size: 0.875rem; /* 14px */
+    }
+    #chat-history {
+        padding: 0.75rem; /* 12px */
+    }
+    #user-input {
+        padding: 0.5rem; /* 8px */
+    }
+    #send-btn {
+        padding: 0.5rem 0.75rem; /* 8px 12px */
+    }
+    .message-bubble {
+        max-width: 90%;
+    }
+}
+
+/* Loading spinner */
+.loader {
+    border: 4px solid #f3f3f320; /* Light grey */
+    border-top: 4px solid #94e2d5; /* Accent color */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-left: 8px; /* Spacing from "Bot is typing..." */
+}
+.dark .loader {
+    border-top: 4px solid #94e2d5; /* Dark theme accent */
+}
+.light .loader {
+     border-top: 4px solid #3498db; /* Light theme accent */
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
